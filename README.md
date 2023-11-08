@@ -7,5 +7,7 @@
 # MineRender
 ## Quick, Easy, Interactive 3D/2D Renders of Minecraft
 
+_WIP of MineRender v2_
+
 
 [MineRender.org](https://minerender.org/)
