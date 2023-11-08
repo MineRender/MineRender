@@ -320,6 +320,11 @@ export class Renderer {
 
     //</editor-fold>
 
+    public toImage(): string {
+        //TODO: mime type, trim transparent pixels
+        return this.renderer.domElement.toDataURL();
+    }
+
     ///
 
     protected get attachedToBody() {
