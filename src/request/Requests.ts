@@ -11,9 +11,12 @@ if (typeof window === "undefined") {
 
 export class Requests {
 
-    private static axiosInstance: AxiosInstance = axios.create({});
+    private static axiosInstance: AxiosInstance = axios.create({
+        timeout: 5000
+    });
 
     private static mcAssetInstance: AxiosInstance = axios.create({
+        timeout: 5000
     })
 
     private static mcAssetRequestQueue: JobQueue<AxiosRequestConfig, AxiosResponse>
