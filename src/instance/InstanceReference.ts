@@ -27,7 +27,7 @@ export class InstanceReference<T extends Instanceable> implements Transformable 
     }
 
     setPosition(position: Vector3): void {
-        console.log("InstanceReference#setPosition",position)
+        // console.log("InstanceReference#setPosition",position)
         this.instanceable.setPositionAt(this.index, position);
     }
 
@@ -36,12 +36,12 @@ export class InstanceReference<T extends Instanceable> implements Transformable 
     }
 
     setRotation(rotation: Euler): void {
-        console.log("InstanceReference#setRotation",rotation)
+        // console.log("InstanceReference#setRotation",rotation)
         this.instanceable.setRotationAt(this.index, rotation);
     }
 
     getRotation(): Euler {
-        console.log("InstanceReference#getRotation")
+        // console.log("InstanceReference#getRotation")
         return this.instanceable.getRotationAt(this.index);
     }
 

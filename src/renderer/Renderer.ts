@@ -1,22 +1,22 @@
-import { AxesHelper, Camera, EventDispatcher, GridHelper, OrthographicCamera, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
-import { MineRenderScene } from "./MineRenderScene";
+import {AxesHelper, Camera, EventDispatcher, GridHelper, OrthographicCamera, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, warn, WebGLRenderer} from "three";
+import {MineRenderScene} from "./MineRenderScene";
 import merge from "ts-deepmerge";
 import Stats from "stats.js";
-import { DeepPartial, isVector3 } from "../util/util";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
-import { SSAARenderPass } from "three/examples/jsm/postprocessing/SSAARenderPass";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { SAOPass } from "three/examples/jsm/postprocessing/SAOPass";
-import { SSAOPass } from "three/examples/jsm/postprocessing/SSAOPass";
-import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
-import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass";
-import { SSAOShader } from "three/examples/jsm/shaders/SSAOShader";
-import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
-import { ToonShader1, ToonShader2 } from "three/examples/jsm/shaders/ToonShader";
-import { isTripleArray, TripleArray } from "../model/Model";
-import { isOrthographicCamera, isPerspectiveCamera } from "../util/three";
+import {DeepPartial, isVector3, Maybe} from "../util/util";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
+import {SSAARenderPass} from "three/examples/jsm/postprocessing/SSAARenderPass";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
+import {CopyShader} from "three/examples/jsm/shaders/CopyShader";
+import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
+import {SAOPass} from "three/examples/jsm/postprocessing/SAOPass";
+import {SSAOPass} from "three/examples/jsm/postprocessing/SSAOPass";
+import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
+import {SMAAPass} from "three/examples/jsm/postprocessing/SMAAPass";
+import {SSAOShader} from "three/examples/jsm/shaders/SSAOShader";
+import {BloomPass} from "three/examples/jsm/postprocessing/BloomPass";
+import {ToonShader1, ToonShader2} from "three/examples/jsm/shaders/ToonShader";
+import {isTripleArray, TripleArray} from "../model/Model";
+import {isOrthographicCamera, isPerspectiveCamera} from "../util/three";
 
 export class Renderer {
 
@@ -56,7 +56,7 @@ export class Renderer {
     });
     public readonly options: RendererOptions;
 
-    public readonly element: HTMLElement;
+    protected _element?: HTMLElement;
 
     protected _scene: MineRenderScene;
     protected _camera: Camera;
@@ -73,9 +73,8 @@ export class Renderer {
     protected _animationFrame?: number = undefined;
     protected _resizeListener?: () => void = undefined;
 
-    constructor(options?: DeepPartial<RendererOptions>, element = document.body) {
+    constructor(options?: DeepPartial<RendererOptions>) {
         this.options = merge({}, Renderer.DEFAULT_OPTIONS, options ?? {});
-        this.element = element;
 
         this._animationLoop = this.animate.bind(this);
         this._fpsTimer = this.options.render.fpsLimit > 0 ? (1000 / this.options.render.fpsLimit) : undefined;
@@ -185,7 +184,7 @@ export class Renderer {
 
     public init() {
         if (typeof window["__THREE_DEVTOOLS__"] !== 'undefined') {
-            window["__THREE_DEVTOOLS__"].dispatchEvent(new CustomEvent('observe', { detail: this.scene }));
+            window["__THREE_DEVTOOLS__"].dispatchEvent(new CustomEvent('observe', {detail: this.scene}));
         }
 
         /// DEBUG
@@ -228,16 +227,29 @@ export class Renderer {
             };
             window.addEventListener('resize', this._resizeListener);//TODO: remove listener
         }
+    }
 
-        // Add the canvas!
-        this.element.appendChild(this.renderer.domElement);
+    public get element(): Maybe<HTMLElement> {
+        return this._element;
+    }
+
+    public appendTo(element: HTMLElement): void {
+        this._element = element;
+        this._element.appendChild(this.renderer.domElement);
+        if (this.viewWidth == 0) {
+            console.warn('0 element width');
+        }
+        if (this.viewHeight == 0) {
+            console.warn('0 element height');
+        }
+        this.resize(this.viewWidth, this.viewHeight);
     }
 
     /**
      * Register an EventDispatcher which may update the scene or renderer in order to redraw the scene
      */
     public registerEventDispatcher(dispatcher: EventDispatcher, changeEvent: string = 'change') {
-        dispatcher.addEventListener(changeEvent,event=>{
+        dispatcher.addEventListener(changeEvent, event => {
             this._dirty = true;
         })
     }
@@ -327,11 +339,11 @@ export class Renderer {
     }
 
     protected get viewWidth() {
-        return this.attachedToBody ? window.innerWidth : this.element.offsetWidth;
+        return this.attachedToBody ? window.innerWidth : this.element?.offsetWidth || 0;
     }
 
     protected get viewHeight() {
-        return this.attachedToBody ? window.innerHeight : this.element.offsetHeight;
+        return this.attachedToBody ? window.innerHeight : this.element?.offsetHeight || 0;
     }
 
     public get scene(): MineRenderScene {

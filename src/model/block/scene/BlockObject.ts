@@ -37,7 +37,7 @@ export class BlockObject extends SceneObject {
     private _models: (ModelObject | InstanceReference<ModelObject>)[] = [];
 
     constructor(readonly blockState: BlockState, options?: Partial<BlockObjectOptions>) {
-        super();
+        super(options);
         this.options = merge({}, BlockObject.DEFAULT_OPTIONS, options ?? {});
         //TODO
     }
