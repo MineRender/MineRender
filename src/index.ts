@@ -1,4 +1,5 @@
 export * from "./renderer/Renderer";
+export * from './renderer'
 export * from "./Materials"
 export * from "./Geometries"
 export * from "./Meshes"

@@ -13,10 +13,6 @@ export function isInstancedMesh(obj: any): obj is InstancedMesh {
     return (<InstancedMesh> obj).isInstancedMesh;
 }
 
-export function isSceneObject(obj: any): obj is SceneObject {
-    return (<SceneObject> obj).isSceneObject;
-}
-
 export function isPerspectiveCamera(obj: any): obj is PerspectiveCamera {
     return (<PerspectiveCamera>obj).isPerspectiveCamera;
 }

@@ -1,6 +1,5 @@
 import { Object3D, Scene } from "three";
-import { SceneObject } from "./SceneObject";
-import { isSceneObject } from "../util/three";
+import {isSceneObject, SceneObject} from "./SceneObject";
 import merge from "ts-deepmerge";
 import { Model } from "../model/Model";
 import { ModelObject, ModelObjectOptions } from "../model/scene/ModelObject";
