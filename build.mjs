@@ -6,6 +6,7 @@ await esbuild.build({
     entryPoints: ['src/index.ts'],
     bundle: true,
     sourcemap: 'linked',
+    sourceRoot: 'https://raw.githubusercontent.com/MineRender/MineRender/typescript/', //TODO: update this
     outfile: 'dist/bundle.js',
     resolveExtensions:['.tsc', '.ts','.js'],
     // external: ['THREE'],
