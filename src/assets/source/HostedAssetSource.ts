@@ -13,8 +13,13 @@ import { Requests } from "../../request";
 import { AssetLoader } from "../AssetLoader";
 import { AssetParser } from "./parser";
 import { ResponseParser } from "./parser";
+import merge from "ts-deepmerge";
 
 const p = prefix("HostedAssetSource");
+
+const DEFAULT_OPTIONS: HostedAssetSourceOptions = {
+    retryDefaults: true
+}
 
 export class HostedAssetSource extends AssetSource {
 
@@ -155,18 +160,32 @@ export class HostedAssetSource extends AssetSource {
     }
 
     private readonly _root: string;
+    private readonly _options: HostedAssetSourceOptions;
 
-    public constructor(root: string) {
+    public constructor(root: string, options?: Partial<HostedAssetSourceOptions>) {
         super();
         this._root = root;
+        this._options = merge({}, DEFAULT_OPTIONS, options ?? {});
     }
 
     public get root(): string {
         return this._root;
     }
 
-    public get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser): Promise<Maybe<T>> {
-        return this.loadOrRetryWithDefaults(key, HostedAssetSource.PARSER_MAP.get(parser) as ResponseParser<T>);
+    public get options(): HostedAssetSourceOptions {
+        return this._options;
     }
 
+    public get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser): Promise<Maybe<T>> {
+        const responseParser = HostedAssetSource.PARSER_MAP.get(parser) as ResponseParser<T>;
+        if (this.options.retryDefaults) {
+            return this.loadOrRetryWithDefaults(key, responseParser);
+        }
+        return this.load(key, responseParser);
+    }
+
+}
+
+interface HostedAssetSourceOptions {
+    retryDefaults: boolean;
 }
