@@ -61,4 +61,8 @@ export class BlockStates {
         return Promise.all(promises);
     }
 
+    public static async clearCache() {
+        await this.PERSISTENT_CACHE.clear();
+    }
+
 }
