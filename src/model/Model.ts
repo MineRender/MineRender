@@ -11,7 +11,7 @@ export const BUILTIN_ENTITY = "builtin/entity";
 export const DEFAULT_ELEMENTS: ModelElement[] = []
 
 export interface Model extends MinecraftAsset {
-    textures?: ModelTextures;
+    textures?: IModelTextures;
     parent?: string;
     display?: ModelDisplay;
     elements?: ModelElement[];
@@ -38,11 +38,11 @@ export interface ModelDisplay {
     scale?: TripleArray;
 }
 
-export interface ModelTextures {
+export interface IModelTextures {
     [variable: string]: string;
 }
 
-export interface BlockModelTextures extends ModelTextures {
+export interface BlockModelTextures extends IModelTextures {
     particle: string;
 }
 

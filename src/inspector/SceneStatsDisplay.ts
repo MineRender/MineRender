@@ -1,7 +1,7 @@
 import { MineRenderScene } from "../renderer/MineRenderScene";
 import { Renderer } from "../renderer/Renderer";
 
-export class SceneStats {
+export class SceneStatsDisplay {
 
     readonly statsContainer: HTMLDivElement;
 
