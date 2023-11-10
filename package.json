@@ -14,7 +14,7 @@
     "bundle:w": "TODO",
     "build": "yarn run clean && npm run compile && npm run bundle",
     "doc": "typedoc --out docs src",
-    "publish:alpha": "npm version prerelease --force --preid=alpha && npm publish --tag=alpha"
+    "publish:alpha": "npm version prerelease --preid=alpha && npm publish --tag=alpha"
   },
   "browserify": {
     "transform": [
