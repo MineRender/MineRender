@@ -1,4 +1,3 @@
-import { base64encode, md5 } from "../util/util";
 import { Serializable } from "../Serializable";
 import { DEFAULT_NAMESPACE, DEFAULT_ROOT } from "./Assets";
 import { AssetLoader } from "./AssetLoader";
