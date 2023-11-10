@@ -29,6 +29,15 @@ export class AssetLoader {
         console.log(p, "Added AssetSource", key);
     }
 
+    public static removeSource(key: string): Maybe<AssetSource> {
+        const index = this._SOURCES.findIndex(s => s.key === key);
+        const spliced = this._SOURCES.splice(index, 1);
+        if (spliced.length > 0) {
+            return spliced[0].source;
+        }
+        return undefined;
+    }
+
     static {
         this.addSource("mcassets", new HostedAssetSource(DEFAULT_ROOT));
     }
