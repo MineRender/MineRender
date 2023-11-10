@@ -11,9 +11,8 @@
     "compile:w": "tsc -p tsconfig.json -w",
     "compile-c:w": "tsc -p tsconfig-cjs.json -w",
     "bundle": "node ./build.mjs",
-    "bundle:w": "",
-    "build": "yarn run clean && npm run compile",
-    "build:w": "yarn run clean && npm run compile:w",
+    "bundle:w": "TODO",
+    "build": "yarn run clean && npm run compile && npm run bundle",
     "doc": "typedoc --out docs src",
     "publish:alpha": "npm version prerelease --preid=alpha && npm publish --tag=alpha"
   },

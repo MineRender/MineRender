@@ -5,6 +5,7 @@ await esbuild.build({
     platform: "browser",
     entryPoints: ['src/index.ts'],
     bundle: true,
+    sourcemap: 'linked',
     outfile: 'dist/bundle.js',
     resolveExtensions:['.tsc', '.ts','.js'],
     // external: ['THREE'],
