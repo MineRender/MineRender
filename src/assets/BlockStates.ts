@@ -8,6 +8,8 @@ import defaultBlockStates from "../model/defaultBlockStates.json";
 import { BlockStateProperties, BlockStatePropertyDefaults } from "../model/block/BlockStateProperties";
 import { AssetKey } from "./AssetKey";
 import { PersistentCache } from "../cache/PersistentCache";
+import { AssetParser } from "./source/parser/AssetParsers";
+import { ListAsset } from "../ListAsset";
 
 export class BlockStates {
 
@@ -16,7 +18,7 @@ export class BlockStates {
     // BlockState names are hardcoded
     @Memoize()
     public static async getList(): Promise<string[]> {
-        return AssetLoader.loadOrRetryWithDefaults(new AssetKey(
+        return AssetLoader.get<ListAsset>(new AssetKey(
             DEFAULT_NAMESPACE,
             "_list",
             "blockstates",
@@ -24,7 +26,7 @@ export class BlockStates {
             "assets",
             ".json",
             DEFAULT_ROOT
-        ), AssetLoader.LIST).then(r => r?.files ?? []);
+        ), AssetParser.LIST).then(r => r?.files ?? []);
     }
 
     public static getDefaultState(key: AssetKey): Maybe<BlockStatePropertyDefaults> {
@@ -41,9 +43,7 @@ export class BlockStates {
         const keyStr = key.serialize();
         return Caching.blockStateCache.get(keyStr, k => {
             return this.PERSISTENT_CACHE.getOrLoad(keyStr, k1 => {
-                return AssetLoader.loadOrRetryWithDefaults(key, AssetLoader.BLOCKSTATE).then(asset => {
-                    return asset;
-                })
+                return AssetLoader.get<BlockState>(key, AssetParser.BLOCKSTATE);
             })
         }).then(asset => {
             if (asset) {

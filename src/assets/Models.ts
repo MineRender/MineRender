@@ -8,6 +8,8 @@ import { Memoize } from "typescript-memoize";
 import { DEFAULT_NAMESPACE, DEFAULT_ROOT } from "./Assets";
 import { PersistentCache } from "../cache/PersistentCache";
 import { AssetKey } from "./AssetKey";
+import { ListAsset } from "../ListAsset";
+import { AssetParser } from "./source/parser/AssetParsers";
 
 export class Models {
 
@@ -15,7 +17,7 @@ export class Models {
 
     @Memoize()
     public static async getItemList(): Promise<string[]> {
-        return AssetLoader.loadOrRetryWithDefaults(new AssetKey(
+        return AssetLoader.get<ListAsset>(new AssetKey(
             DEFAULT_NAMESPACE,
             "_list",
             "models",
@@ -23,7 +25,7 @@ export class Models {
             "assets",
             ".json",
             DEFAULT_ROOT
-        ), AssetLoader.LIST).then(r => r?.files ?? []);
+        ), AssetParser.LIST).then(r => r?.files ?? []);
     }
 
     public static async loadAndMerge(key: AssetKey): Promise<Maybe<Model>> {
@@ -44,9 +46,7 @@ export class Models {
         const keyStr = key.serialize();
         return Caching.rawModelCache.get(keyStr, k => {
             return this.PERSISTENT_CACHE.getOrLoad(keyStr, k1 => {
-                return AssetLoader.loadOrRetryWithDefaults(key, AssetLoader.MODEL).then(asset => {
-                    return asset;
-                })
+                return AssetLoader.get<Model>(key, AssetParser.MODEL);
             })
         }).then(asset => {
             if (asset) {

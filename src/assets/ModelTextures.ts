@@ -9,6 +9,7 @@ import { MinecraftTextureMeta } from "../MinecraftTextureMeta";
 import { PersistentCache } from "../cache/PersistentCache";
 import { keys } from "node-persist";
 import { AssetKey } from "./AssetKey";
+import { AssetParser } from "./source/parser/AssetParsers";
 
 export class ModelTextures {
 
@@ -25,7 +26,7 @@ export class ModelTextures {
     public static async preload(key: AssetKey): Promise<Maybe<TextureAsset>> {
         const keyStr = key.serialize();
         return Caching.textureAssetCache.get(keyStr, k => {
-            return AssetLoader.loadOrRetryWithDefaults<TextureAsset>(key, AssetLoader.IMAGE).then(asset => {
+            return AssetLoader.get<TextureAsset>(key, AssetParser.IMAGE).then(asset => {
                 if (asset)
                     asset.key = key;
                 return asset;
@@ -42,7 +43,7 @@ export class ModelTextures {
 
         return Caching.textureMetaCache.get(keyStr, k => {
             return this.PERSISTENT_META_CACHE.getOrLoad(keyStr, k1 => {
-                return AssetLoader.loadOrRetryWithDefaults<MinecraftTextureMeta>(key, AssetLoader.META).then(asset => {
+                return AssetLoader.get<MinecraftTextureMeta>(key, AssetParser.META).then(asset => {
                     if (asset)
                         asset.key = key;
                     return asset;
