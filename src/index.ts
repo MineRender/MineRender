@@ -39,6 +39,8 @@ export * from './three';
 export * from './util';
 export * from './world';
 export * from './assets';
+export * from './assets/source';
+export * from './assets/source/parser';
 export * from './bedrock';
 export * from './cache';
 export * from './canvas';

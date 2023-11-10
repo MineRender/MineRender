@@ -29,7 +29,7 @@ export class AssetLoader {
     }
 
     static {
-        this.addSource("mcassets", AssetSource.hosted(DEFAULT_ROOT));
+        this.addSource("mcassets", new HostedAssetSource(DEFAULT_ROOT));
     }
 
     public static async get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<Maybe<T>> {

@@ -1,4 +1,4 @@
-import { AssetSource } from "./AssetSource";
+import { AssetSource } from ".";
 import { BlockState, Model, TextureAsset } from "../../model";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Maybe, prefix } from "../../util";
@@ -11,8 +11,8 @@ import { AssetKey } from "../AssetKey";
 import { DEFAULT_NAMESPACE, DEFAULT_ROOT } from "../Assets";
 import { Requests } from "../../request";
 import { AssetLoader } from "../AssetLoader";
-import { AssetParser } from "./parser/AssetParsers";
-import { ResponseParser } from "./parser/ResponseParser";
+import { AssetParser } from "./parser";
+import { ResponseParser } from "./parser";
 
 const p = prefix("HostedAssetSource");
 
