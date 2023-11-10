@@ -13,6 +13,7 @@ import { NBTAsset, NBTHelper } from "../nbt/NBTHelper";
 import { prefix } from "../util/log";
 import { AssetSource } from "./source/AssetSource";
 import { AssetParser } from "./source/parser/AssetParsers";
+import { HostedAssetSource } from "./source";
 
 const p = prefix("AssetLoader");
 
@@ -24,7 +25,7 @@ export class AssetLoader {
     private static _SOURCES: AssetSourceReference[] = [];
 
     public static addSource(key: string, source: AssetSource) {
-        this._SOURCES.push({key, source});
+        this._SOURCES.unshift({key, source});
         console.log(p, "Added AssetSource", key);
     }
 
