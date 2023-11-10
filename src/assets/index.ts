@@ -6,3 +6,7 @@ export * from './BlockStates';
 export * from './Entities';
 export * from './ModelTextures';
 export * from './Models';
+export * from "./source/AssetSource";
+export * from "./source/HostedAssetSource";
+export * from "./source/parser/AssetParsers";
+export * from "./source/parser/ResponseParser";
