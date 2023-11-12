@@ -2,3 +2,4 @@
 export * from './AssetSource';
 export * from './HostedAssetSource';
 export * from './parser';
+export * from './archive';
