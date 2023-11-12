@@ -13,6 +13,7 @@ export class ArchiveAssetSource extends AssetSource implements ArchiveProxy {
 
     constructor(archiveProxy: ArchiveProxy) {
         super();
+        console.log(archiveProxy)
         this._archiveProxy = archiveProxy;
     }
 
@@ -22,6 +23,7 @@ export class ArchiveAssetSource extends AssetSource implements ArchiveProxy {
 
     async get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<Maybe<T>> {
         //TODO: implement
+        console.log("ArchiveAssetSource.get", key, parser);
         let entries = (await this.getEntries());
         console.log(entries);
         let firstEntry = entries[0];

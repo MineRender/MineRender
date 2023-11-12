@@ -24,7 +24,14 @@ export class AssetLoader {
 
     private static _SOURCES: AssetSourceReference[] = [];
 
-    public static addSource(key: string, source: AssetSource) {
+    public static addSource(key: string, source: AssetSource, override: boolean = true) {
+        if (override) {
+            const existing = this.removeSource(key);
+            if (existing) {
+                console.log(p, "Removed existing AssetSource", key);
+            }
+        }
+
         this._SOURCES.unshift({key, source});
         console.log(p, "Added AssetSource", key);
     }
