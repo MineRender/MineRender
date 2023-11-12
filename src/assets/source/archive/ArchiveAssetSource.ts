@@ -26,7 +26,7 @@ export class ArchiveAssetSource extends AssetSource implements ArchiveProxy {
         console.log("ArchiveAssetSource.get", key, parser);
         let entries = (await this.getEntries());
         console.log(entries);
-        let firstEntry = entries[0];
+        let firstEntry = entries.filter(e=>!e.directory)[0]
         let blob = await firstEntry.getData();
         return Requests.genericRequest({
             url: URL.createObjectURL(blob),

@@ -16,6 +16,7 @@ export class BrowserArchiveProxy implements ArchiveProxy {
         return (await this._reader.getEntries()).map(e => {
             return {
                 filename: e.filename,
+                directory: e.directory,
                 getData(): Promise<Blob> {
                     return e.getData!(new BlobWriter())
                 }

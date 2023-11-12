@@ -97,6 +97,9 @@ export class Caching {
     public static clear() {
         this.rawImageCache.invalidateAll();
         this.textureCache.invalidateAll();
+        //TODO: add all
+        this.rawModelCache.invalidateAll();
+        this.mergedModelCache.invalidateAll();
     }
 
     public static end() {

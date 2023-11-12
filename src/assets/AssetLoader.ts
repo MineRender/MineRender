@@ -51,6 +51,7 @@ export class AssetLoader {
 
     public static async get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<Maybe<T>> {
         for (const source of this._SOURCES) {
+            console.log("Trying source", source.key) //TODO: remove
             const result = await source.source.get<T>(key, parser);
             if (result) {
                 return result;
