@@ -6,6 +6,7 @@ import { AssetKey } from "../../AssetKey";
 import { AssetParser } from "../parser";
 import { Maybe } from "../../../util";
 import { Requests } from "../../../request";
+import { HostedAssetSource } from "../HostedAssetSource";
 
 export class ArchiveAssetSource extends AssetSource implements ArchiveProxy {
 
@@ -24,6 +25,7 @@ export class ArchiveAssetSource extends AssetSource implements ArchiveProxy {
     async get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<Maybe<T>> {
         //TODO: implement
         console.log("ArchiveAssetSource.get", key, parser);
+        console.log(key.toNamespacedString())
         let entries = (await this.getEntries());
         console.log(entries);
         let firstEntry = entries.filter(e=>!e.directory)[0]
