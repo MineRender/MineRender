@@ -38,9 +38,11 @@ export class AssetLoader {
 
     public static removeSource(key: string): Maybe<AssetSource> {
         const index = this._SOURCES.findIndex(s => s.key === key);
-        const spliced = this._SOURCES.splice(index, 1);
-        if (spliced.length > 0) {
-            return spliced[0].source;
+        if (index != -1) {
+            const spliced = this._SOURCES.splice(index, 1);
+            if (spliced.length > 0) {
+                return spliced[0].source;
+            }
         }
         return undefined;
     }
@@ -50,6 +52,7 @@ export class AssetLoader {
     }
 
     public static async get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<Maybe<T>> {
+        console.log(this._SOURCES)
         for (const source of this._SOURCES) {
             console.log("Trying source", source.key) //TODO: remove
             const result = await source.source.get<T>(key, parser);

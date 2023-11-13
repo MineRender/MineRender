@@ -65,7 +65,7 @@ export class MineRenderScene extends Scene {
     }
 
     async addSceneObject<A extends BasicMinecraftAsset, T extends SceneObject, O extends SceneObjectOptions>(asset: A, objectSupplier: () => T | Promise<T>, options?: Partial<O>, parent: Object3D = this): Promise<T | InstanceReference<T>> {
-        console.log("addSceneObject")
+        console.log("addSceneObject", asset)
         console.log("parent", parent)
         this.dirty = true;
         // console.log(this.instanceCache)

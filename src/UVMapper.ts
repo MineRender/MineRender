@@ -259,7 +259,10 @@ export class UVMapper {
                     uniqueTextureNames.push(textureKey);
                     const assetKey = AssetKey.parse("textures", textureValue, model.key);
                     promises.push(ModelTextures.get(assetKey).then(asset => {
-                        if (!asset) return;
+                        if (!asset) {
+                            console.warn(p, "Missing texture", assetKey)
+                            return;
+                        }
                         textureMap[textureKey] = new WrappedImage(asset);
                     }));
                     promises.push(ModelTextures.getMeta(assetKey).then(meta => {
@@ -293,7 +296,7 @@ export class UVMapper {
             }
             this.fillMissingTextureKeys(model.textures, sizes);
 
-            // console.log(sizes);
+            // console.log("sizes", sizes);
 
             const s = (Math.ceil(Math.sqrt(textureCount + 1))); // +1 for transparency
             const size = Math.ceil(s * maxWidth)
@@ -378,7 +381,7 @@ export class UVMapper {
 
             this.fillMissingTextureKeys(model.textures, positions);
 
-            // console.log(positions);
+            // console.log("positions", positions);
 
             if (isItemModel) {
                 console.debug(p, "Generating item model for", model);
