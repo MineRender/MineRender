@@ -97,6 +97,12 @@ export class Caching {
     public static clear() {
         this.rawImageCache.invalidateAll();
         this.textureCache.invalidateAll();
+        this.imageDataCache.invalidateAll();
+        this.wrappedImageCache.invalidateAll();
+        this.canvasImageDataCache.invalidateAll();
+        this.materialCache.invalidateAll();
+        this.modelTextureAtlasCache.invalidateAll();
+        this.textureAssetCache.invalidateAll();
         //TODO: add all
         this.rawModelCache.invalidateAll();
         this.mergedModelCache.invalidateAll();

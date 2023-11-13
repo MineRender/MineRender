@@ -242,7 +242,7 @@ export class UVMapper {
     public static async createAtlas(originalModel: Model): Promise<Maybe<TextureAtlas>> {
         const textureMap: { [key: string]: Maybe<WrappedImage>; } = {};
         const metaMap: { [key: string]: Maybe<MinecraftTextureMeta>; } = {};
-        const model = { ...originalModel };
+        const model = {...originalModel};
         const isItemModel = !("elements" in model);
 
         console.debug(p, "Creating Atlas for", model.key);
@@ -259,7 +259,8 @@ export class UVMapper {
                     uniqueTextureNames.push(textureKey);
                     const assetKey = AssetKey.parse("textures", textureValue, model.key);
                     promises.push(ModelTextures.get(assetKey).then(asset => {
-                        textureMap[textureKey] = new WrappedImage(asset!);
+                        if (!asset) return;
+                        textureMap[textureKey] = new WrappedImage(asset);
                     }));
                     promises.push(ModelTextures.getMeta(assetKey).then(meta => {
                         metaMap[textureKey] = meta;
@@ -373,7 +374,7 @@ export class UVMapper {
                 }
             }
             const atlasImageData = image.toDataURL();
-            console.log(p,"Atlas Image for", model.key, atlasImageData);
+            console.log(p, "Atlas Image for", model.key, atlasImageData);
 
             this.fillMissingTextureKeys(model.textures, positions);
 
@@ -388,7 +389,7 @@ export class UVMapper {
                         model.elements.push(...ModelGenerator.generateItemModel(textureImage.data, layerName))
                     }
                 }
-                console.debug(p,"Item model elements",model.elements)
+                console.debug(p, "Item model elements", model.elements)
             }
 
             if (!model.elements) {
