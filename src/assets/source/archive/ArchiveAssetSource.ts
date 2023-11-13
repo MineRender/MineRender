@@ -9,6 +9,7 @@ import { Requests } from "../../../request";
 import { HostedAssetSource } from "../HostedAssetSource";
 import { AssetLoader } from "../../AssetLoader";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
+import { BrowserArchiveProxy } from "./BrowserArchiveProxy";
 
 const p = prefix("ArchiveAssetSource");
 
@@ -20,6 +21,10 @@ export class ArchiveAssetSource extends AssetSource implements ArchiveProxy {
         super();
         console.log(archiveProxy)
         this._archiveProxy = archiveProxy;
+    }
+
+    public static blob(blob: Blob): ArchiveAssetSource {
+        return new ArchiveAssetSource(new BrowserArchiveProxy(blob));
     }
 
     public async getEntries(): Promise<ArchiveEntry[]> {
@@ -34,11 +39,8 @@ export class ArchiveAssetSource extends AssetSource implements ArchiveProxy {
     async get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<Maybe<T>> {
         const responseParser = HostedAssetSource.PARSER_MAP.get(parser as AssetParser) as ResponseParser<T>;
 
-        //TODO: implement
         console.log("ArchiveAssetSource.get", key, parser);
-        console.log(key.toNamespacedString())
         let entries = (await this.getEntries());
-        console.log(entries);
 
         const path = `${this.assetBasePath(key)}${key.type !== undefined ? key.type + '/' : ''}${key.path}${key.extension}`;
         console.log(path);
