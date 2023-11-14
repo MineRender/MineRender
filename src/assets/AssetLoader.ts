@@ -53,14 +53,18 @@ export class AssetLoader {
 
     public static async get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<Maybe<T>> {
         console.log(this._SOURCES)
+        let promises: Promise<Maybe<T>>[] = [];
         for (const source of this._SOURCES) {
-            console.log("Trying source", source.key) //TODO: remove
-            const result = await source.source.get<T>(key, parser);
-            if (result) {
-                return result;
-            }
+            promises.push(source.source.get<T>(key, parser));
         }
-        return undefined;
+        return Promise.all(promises).then(results => {
+            for (const result of results) {
+                if (result) {
+                    return result;
+                }
+            }
+            return undefined;
+        });
     }
 
 }
