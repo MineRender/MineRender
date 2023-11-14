@@ -64,17 +64,17 @@ export class MineRenderScene extends Scene {
         return this.add(...object);
     }
 
-    async addSceneObject<A extends BasicMinecraftAsset, T extends SceneObject, O extends SceneObjectOptions>(asset: A, objectSupplier: () => T | Promise<T>, options?: Partial<O>, parent: Object3D = this): Promise<T | InstanceReference<T>> {
+    async addSceneObject<A extends BasicMinecraftAsset, T extends SceneObject, O extends SceneObjectOptions>(asset: A, objectSupplier: () => T | Promise<T>, _options?: Partial<O>, parent: Object3D = this): Promise<T | InstanceReference<T>> {
         console.log("addSceneObject", asset)
         console.log("parent", parent)
         this.dirty = true;
         // console.log(this.instanceCache)
-        if (options?.instanceMeshes && asset.key &&  (<AssetKey>asset.key)?.assetType === "models"/*TODO*/) {
+        const obj = await objectSupplier();
+        if (obj?.options?.instanceMeshes && asset.key &&  (<AssetKey>asset.key)?.assetType === "models"/*TODO*/) {
             // console.log("instanceMeshes + key")
             // check for existing instances
             const key = asset.key.serialize();
             return this.instanceManager.getOrCreate(key, async () => {
-                const obj = await objectSupplier();
                 obj.scene = this;
                 await obj.init();
                 parent.add(obj);
@@ -83,7 +83,6 @@ export class MineRenderScene extends Scene {
             });
         } else {
             // console.log("!instanceMeshes | !key")
-            const obj = await objectSupplier();
             obj.scene = this;
             // await this.initAndAdd(obj);
             await obj.init();

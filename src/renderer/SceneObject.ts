@@ -44,6 +44,7 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
     constructor(options?: Partial<SceneObjectOptions>) {
         super();
         this.options = merge({}, SceneObject.DEFAULT_OPTIONS, options ?? {});
+        console.log("SceneObject options", this.options);
     }
 
     public set scene(scene: MineRenderScene) {

@@ -37,7 +37,7 @@ export class ModelObject extends SceneObject {
     constructor(readonly originalModel: Model, options?: Partial<ModelObjectOptions>) {
         super(options);
         this.options = merge({}, ModelObject.DEFAULT_OPTIONS, options ?? {});
-        console.log(this.options);
+        console.log("ModelObject options", this.options);
     }
 
     async init(): Promise<void> {
