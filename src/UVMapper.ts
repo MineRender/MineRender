@@ -339,6 +339,8 @@ export class UVMapper {
                         hasTransparency = true;
                     }
 
+                    console.log("texture", textureKey, "animated", texture.animated)
+
                     if (texture.animated) {
                         hasAnimation = true;
                         const meta = metaMap[textureKey];
@@ -350,7 +352,7 @@ export class UVMapper {
                         let f = 0;
 
                         animatorFunctions[textureKey] = () => {
-                            console.log("animating", textureKey)
+                            // console.log("animating", textureKey)
                             //TODO: use mcmeta for frame count, delays, etc
                             //TODO: interpolate?
                             if (t++ >= frameTime) {

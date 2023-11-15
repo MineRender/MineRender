@@ -157,4 +157,22 @@ export class Materials {
         })!;
     }
 
+    public static needsUpdate(mat: Material) {
+        mat.needsUpdate = true;
+
+        if (mat.type === 'ShaderMaterial') {
+            let mat1=mat as ShaderMaterial;
+            console.log(mat1);
+            if ("map" in mat1.uniforms) {
+                mat1.uniforms.map.value.needsUpdate = true;
+            }
+        }
+        if (mat.type === 'MeshBasicMaterial' || mat.type === 'MeshStandardMaterial') {
+            let mat1 = mat as (MeshBasicMaterial | MeshStandardMaterial);
+            if (mat1.map) {
+                mat1.map.needsUpdate = true;
+            }
+        }
+    }
+
 }
