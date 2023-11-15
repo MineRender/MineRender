@@ -5,6 +5,7 @@ import { Maybe, toDegrees, toRadians } from "../util/util";
 import { isTransformable, Transformable } from "../Transformable";
 import { prefix } from "../util/log";
 import { isMesh } from "../util/three";
+import { TextureAtlas } from "../texture";
 
 const p = prefix("SceneInspector");
 
@@ -117,6 +118,17 @@ export class SceneInspector {
             if (isSceneObject(targetObject.parent)) {
                 //...
             }
+        }
+
+        if ('atlas' in targetObject) {
+            const atlas =  targetObject['atlas'] as TextureAtlas;
+            const img = document.createElement("img");
+            img.src = atlas.image.dataUrl;
+            img.style.width = "100px";
+            img.style.height = "100px";
+            img.style.float = "right";
+            img.style.imageRendering = "pixelated";
+            this.objectInfoContainer.prepend(img);
         }
 
         this.objectControlsContainer.innerHTML = '';
