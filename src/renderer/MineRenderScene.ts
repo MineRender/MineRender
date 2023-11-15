@@ -67,14 +67,19 @@ export class MineRenderScene extends Scene {
     async addSceneObject<A extends BasicMinecraftAsset, T extends SceneObject, O extends SceneObjectOptions>(asset: A, objectSupplier: () => T | Promise<T>, _options?: Partial<O>, parent: Object3D = this): Promise<T | InstanceReference<T>> {
         console.log("addSceneObject", asset)
         console.log("parent", parent)
+        console.log(_options);
         this.dirty = true;
-        // console.log(this.instanceCache)
+        // console.log(this.instanceManager)
+        //TODO: we need a way to call objectSupplier in the instance supplier below
+        // but we also need to get the options that have been merged with the defaults properly
+        // so maybe to the option merging _somewhere_ else, not in the object constructor
         const obj = await objectSupplier();
         if (obj?.options?.instanceMeshes && asset.key &&  (<AssetKey>asset.key)?.assetType === "models"/*TODO*/) {
-            // console.log("instanceMeshes + key")
+            console.log("instanceMeshes + key")
             // check for existing instances
             const key = asset.key.serialize();
             return this.instanceManager.getOrCreate(key, async () => {
+                // const obj = await objectSupplier();
                 obj.scene = this;
                 await obj.init();
                 parent.add(obj);
@@ -82,7 +87,8 @@ export class MineRenderScene extends Scene {
                 return obj;
             });
         } else {
-            // console.log("!instanceMeshes | !key")
+            // const obj = await objectSupplier();
+            console.log("!instanceMeshes | !key")
             obj.scene = this;
             // await this.initAndAdd(obj);
             await obj.init();

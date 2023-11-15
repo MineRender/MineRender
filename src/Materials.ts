@@ -162,7 +162,6 @@ export class Materials {
 
         if (mat.type === 'ShaderMaterial') {
             let mat1=mat as ShaderMaterial;
-            console.log(mat1);
             if ("map" in mat1.uniforms) {
                 mat1.uniforms.map.value.needsUpdate = true;
             }
