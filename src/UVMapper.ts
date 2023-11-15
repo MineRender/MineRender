@@ -286,12 +286,12 @@ export class UVMapper {
             for (let textureKey of uniqueTextureNames) {
                 let texture = textureMap[textureKey];
                 if (!texture) continue;
-                sizes[textureKey] = [texture.width, texture.height];
-                if (texture.width > maxWidth) {
+                sizes[textureKey] = [texture.frameWidth, texture.frameHeight];
+                if (texture.frameWidth > maxWidth) {
                     maxWidth = texture.width;
                 }
-                if (texture.height > maxHeight) {
-                    maxHeight = texture.height;
+                if (texture.frameHeight > maxHeight) {
+                    maxHeight = texture.frameHeight;
                 }
             }
             this.fillMissingTextureKeys(model.textures, sizes);

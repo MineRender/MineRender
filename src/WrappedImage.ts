@@ -37,6 +37,14 @@ export class WrappedImage {
         return this.height > this.width && this.height % this.width === 0;
     }
 
+    get frameWidth(): number {
+        return this.width;
+    }
+
+    get frameHeight(): number {
+        return this.animated ? this.width : this.height;
+    }
+
     get frameCount(): number {
         return this.height / this.width;
     }
