@@ -24,19 +24,17 @@ export class InstanceManager {
     }
 
     public async getOrCreate<T extends SceneObject>(key: string, supplier: () => T | Promise<T>): Promise<InstanceReference<T>> {
-        const cached = await this.get<T>(key);
-        if (typeof cached !== "undefined") {
-            return cached;
+        if (key in this.instanceCache) {
+            return await (this.get<T>(key)) as InstanceReference<T>;
         }
         console.debug(p, "key not in cache", key)
-        const promise = new Promise<InstanceReference<SceneObject>>(async (resolve) => {
+        this.instanceCache[key] = new Promise<InstanceReference<SceneObject>>(async (resolve) => {
             const obj = await supplier();
             const instance = obj.nextInstance();
-            this.instanceCache[key] = Promise.resolve(instance);
+            // this.instanceCache[key] = Promise.resolve(instance);
             resolve(instance);
         })
-        this.instanceCache[key] = promise;
-        return await promise as InstanceReference<T>;
+        return await this.instanceCache[key] as InstanceReference<T>;
     }
 
     public reset() {
