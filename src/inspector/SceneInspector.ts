@@ -122,8 +122,9 @@ export class SceneInspector {
 
         if ('atlas' in targetObject) {
             const atlas =  targetObject['atlas'] as TextureAtlas;
-            const img = document.createElement("img");
-            img.src = atlas.image.dataUrl;
+            // const img = document.createElement("img");
+            const img = atlas.image.canvas as HTMLCanvasElement;
+            // img.src = atlas.image.dataUrl;
             img.style.width = "100px";
             img.style.height = "100px";
             img.style.float = "right";
