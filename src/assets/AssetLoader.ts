@@ -14,6 +14,7 @@ import { prefix } from "../util/log";
 import { AssetSource } from "./source/AssetSource";
 import { AssetParser } from "./source/parser/AssetParsers";
 import { HostedAssetSource } from "./source";
+import merge from "ts-deepmerge";
 
 const p = prefix("AssetLoader");
 
@@ -48,7 +49,19 @@ export class AssetLoader {
     }
 
     static {
+        this.addSource("mcassets-fallback", new HostedAssetSource('https://raw.githubusercontent.com/InventivetalentDev/minerender-fallback-assets/master'));
         this.addSource("mcassets", new HostedAssetSource(DEFAULT_ROOT));
+    }
+
+    public static async getAll<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<T[]> {
+        console.log(this._SOURCES)
+        let promises: Promise<Maybe<T>>[] = [];
+        for (const source of this._SOURCES) {
+            promises.push(source.source.get<T>(key, parser));
+        }
+        return Promise.all(promises).then(results => {
+            return results.filter(r => r != undefined) as T[];
+        });
     }
 
     public static async get<T extends MinecraftAsset>(key: AssetKey, parser: AssetParser | string): Promise<Maybe<T>> {
@@ -58,8 +71,13 @@ export class AssetLoader {
             promises.push(source.source.get<T>(key, parser));
         }
         return Promise.all(promises).then(results => {
+            const fallback = results[results.length - 1];
             for (const result of results) {
                 if (result) {
+                    if (fallback) {
+                        // we have a fallback, so merge it with the result
+                        return merge({}, fallback, result) as T;
+                    }
                     return result;
                 }
             }

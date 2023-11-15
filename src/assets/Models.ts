@@ -44,6 +44,7 @@ export class Models {
             key.extension = ".json";
         }
         const keyStr = key.serialize();
+        //TODO: maybe add the asset source to the key
         return Caching.rawModelCache.get(keyStr, k => {
             return this.PERSISTENT_CACHE.getOrLoad(keyStr, k1 => {
                 return AssetLoader.get<Model>(key, AssetParser.MODEL);
