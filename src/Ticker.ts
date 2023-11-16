@@ -9,7 +9,7 @@ export class Ticker {
     private static counter: number = 0;
     private static readonly _tickers: Map<number, TickerFunction> = new Map<number, TickerFunction>();
 
-    private static readonly interval: Timeout = setInterval(() => {
+    private static readonly interval: Timeout | number = setInterval(() => {
         Ticker._tickers.forEach(t => {
             try{
                 t()

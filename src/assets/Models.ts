@@ -15,7 +15,6 @@ export class Models {
 
     private static PERSISTENT_CACHE = PersistentCache.open("minerender-models");
 
-    @Memoize()
     public static async getItemList(): Promise<string[]> {
         return AssetLoader.get<ListAsset>(new AssetKey(
             DEFAULT_NAMESPACE,

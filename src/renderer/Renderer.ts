@@ -8,13 +8,6 @@ import {SSAARenderPass} from "three/examples/jsm/postprocessing/SSAARenderPass";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 import {CopyShader} from "three/examples/jsm/shaders/CopyShader";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
-import {SAOPass} from "three/examples/jsm/postprocessing/SAOPass";
-import {SSAOPass} from "three/examples/jsm/postprocessing/SSAOPass";
-import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
-import {SMAAPass} from "three/examples/jsm/postprocessing/SMAAPass";
-import {SSAOShader} from "three/examples/jsm/shaders/SSAOShader";
-import {BloomPass} from "three/examples/jsm/postprocessing/BloomPass";
-import {ToonShader1, ToonShader2} from "three/examples/jsm/shaders/ToonShader";
 import {isTripleArray, TripleArray} from "../model/Model";
 import {isOrthographicCamera, isPerspectiveCamera} from "../util/three";
 
@@ -69,7 +62,7 @@ export class Renderer {
 
     protected _animationLoop;
     protected _fpsTimer;
-    protected _animationTimer?: NodeJS.Timeout = undefined;
+    protected _animationTimer?: NodeJS.Timeout | undefined = undefined;
     protected _animationFrame?: number = undefined;
     protected _resizeListener?: () => void = undefined;
 

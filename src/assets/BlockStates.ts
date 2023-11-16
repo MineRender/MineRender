@@ -16,7 +16,6 @@ export class BlockStates {
     private static PERSISTENT_CACHE = PersistentCache.open("minerender-blockstates");
 
     // BlockState names are hardcoded
-    @Memoize()
     public static async getList(): Promise<string[]> {
         return AssetLoader.get<ListAsset>(new AssetKey(
             DEFAULT_NAMESPACE,

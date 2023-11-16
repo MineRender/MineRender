@@ -1,15 +1,13 @@
-import test from "ava";
-import { AssetKey } from "../src";
+const {AssetKey} = require('../dist/cjs');
 
-//TODO: figure out why three jsm example addons breaks this
+test("test", t => {
+})
 
 test("AssetKey#new", t => {
     let k = new AssetKey("minecraft", "textures/block/stone.png");
     console.log(k);
-    t.pass();
 });
 test("AssetKey#parse", t => {
     let k = AssetKey.parse("textures", "block/stone.png");
-   console.log(k);
-   t.pass();
+    console.log(k);
 })
