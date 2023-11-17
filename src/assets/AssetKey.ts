@@ -34,6 +34,7 @@ export class BasicAssetKey implements Serializable {
     }
 }
 
+// TODO: rewrite this to be less dumb
 export class AssetKey extends BasicAssetKey {
 
     constructor(
@@ -64,9 +65,8 @@ export class AssetKey extends BasicAssetKey {
         }
         let path = split.join("/");
 
-        let extension = assetType === "models" ? ".json" :
-            assetType === "textures" ? ".png" :
-                origin?.assetType || "";
+        let extension = assetType === "textures" ? ".png" :
+            origin?.assetType || ".json";
 
         return new AssetKey(namespace, path, assetType, type, "assets", extension, origin?.root);
     }
@@ -81,6 +81,19 @@ export class AssetKey extends BasicAssetKey {
             this.path
         ];
         return a.join("/");
+    }
+
+    getFullPath() {
+        let p: string[] = [];
+        if (this.type) {
+            p.push(this.type);
+        }
+        p.push(this.path);
+        return p.join("/");
+    }
+
+    toNamespacedString() {
+        return this.namespace + ":" + this.getFullPath();
     }
 
     serialize(): string {
