@@ -4,12 +4,12 @@ import { Caching } from "../cache/Caching";
 import { AssetLoader } from "./AssetLoader";
 import { DEFAULT_NAMESPACE, DEFAULT_ROOT } from "./Assets";
 import { Memoize } from "typescript-memoize";
-import defaultBlockStates from "../model/defaultBlockStates.json";
-import { BlockStateProperties, BlockStatePropertyDefaults } from "../model/block/BlockStateProperties";
+import { BlockStatePropertyDefaults } from "../model/block/BlockStateProperties";
 import { AssetKey } from "./AssetKey";
 import { PersistentCache } from "../cache/PersistentCache";
 import { AssetParser } from "./source/parser/AssetParsers";
 import { ListAsset } from "../ListAsset";
+import { MinecraftAsset } from "../MinecraftAsset";
 
 export class BlockStates {
 
@@ -29,8 +29,18 @@ export class BlockStates {
         ), AssetParser.LIST).then(r => r?.files ?? []);
     }
 
-    public static getDefaultState(key: AssetKey): Maybe<BlockStatePropertyDefaults> {
-        return defaultBlockStates["minecraft:" + key.path] as BlockStatePropertyDefaults;
+    @Memoize()
+    public static async getDefaultStates(): Promise<Maybe<DefaultBlockStates>> {
+        const key = AssetKey.parse("blockstates", "minerender:defaultBlockStates");
+        return AssetLoader.get<DefaultBlockStates>(key, AssetParser.JSON);
+    }
+
+    public static async getDefaultState(key: AssetKey): Promise<Maybe<BlockStatePropertyDefaults>> {
+        const defaultStates = await this.getDefaultStates();
+        if (!defaultStates) {
+            return undefined;
+        }
+        return defaultStates["minecraft:" + key.path] as BlockStatePropertyDefaults;
     }
 
     public static async get(key: AssetKey): Promise<Maybe<BlockState>> {
@@ -65,4 +75,8 @@ export class BlockStates {
         await this.PERSISTENT_CACHE.clear();
     }
 
+}
+
+export class DefaultBlockStates implements MinecraftAsset {
+    [k: string]: BlockStatePropertyDefaults;
 }
