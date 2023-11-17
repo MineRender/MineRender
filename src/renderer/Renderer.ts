@@ -2,19 +2,8 @@ import {AxesHelper, Camera, EventDispatcher, GridHelper, OrthographicCamera, PCF
 import {MineRenderScene} from "./MineRenderScene";
 import merge from "ts-deepmerge";
 import Stats from "stats.js";
+import { BloomEffect, EffectComposer, EffectPass, RenderPass, SSAOEffect, } from "postprocessing";
 import {DeepPartial, isVector3, Maybe} from "../util/util";
-import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
-import {SSAARenderPass} from "three/examples/jsm/postprocessing/SSAARenderPass";
-import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
-import {CopyShader} from "three/examples/jsm/shaders/CopyShader";
-import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
-import {SAOPass} from "three/examples/jsm/postprocessing/SAOPass";
-import {SSAOPass} from "three/examples/jsm/postprocessing/SSAOPass";
-import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
-import {SMAAPass} from "three/examples/jsm/postprocessing/SMAAPass";
-import {SSAOShader} from "three/examples/jsm/shaders/SSAOShader";
-import {BloomPass} from "three/examples/jsm/postprocessing/BloomPass";
-import {ToonShader1, ToonShader2} from "three/examples/jsm/shaders/ToonShader";
 import {isTripleArray, TripleArray} from "../model/Model";
 import {isOrthographicCamera, isPerspectiveCamera} from "../util/three";
 
@@ -149,13 +138,17 @@ export class Renderer {
         composer.setSize(this.viewWidth, this.viewHeight);
         //TODO: options
 
-        // This one just tanks completely down to ~2fps (in structures at least, works pretty well for simpler stuff)
-        const ssaaPass = new SSAARenderPass(this.scene, this.camera, 0x000000, 0);//TODO: options
-        ssaaPass.unbiased = true;
-        composer.addPass(ssaaPass);
+        //TODO: compser seems to cause skin objects to appear way too bright
+
+        // // This one just tanks completely down to ~2fps (in structures at least, works pretty well for simpler stuff)
+        // const ssaaPass = new SSAARenderPass(this.scene, this.camera, 0x000000, 0);//TODO: options
+        // ssaaPass.unbiased = true;
+        // composer.addPass(ssaaPass);
 
 
         composer.addPass(new RenderPass(this.scene, this.camera));
+
+        // composer.addPass(new EffectPass(this.camera, new SSAOEffect(this.camera)))
 
 
         // composer.addPass(new SMAAPass(this.viewWidth, this.viewHeight));
@@ -171,10 +164,10 @@ export class Renderer {
 
 
         //
-        //
-        const shaderPass1 = new ShaderPass(CopyShader);
-        shaderPass1.renderToScreen = true;
-        composer.addPass(shaderPass1);
+        // //
+        // const shaderPass1 = new ShaderPass(CopyShader);
+        // shaderPass1.renderToScreen = true;
+        // composer.addPass(shaderPass1);
 
 
         return composer;
