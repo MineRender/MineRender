@@ -17,6 +17,9 @@
     "doc": "typedoc --out docs src",
     "publish:alpha": "npm version prerelease --force --preid=alpha && npm publish --tag=alpha"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "browserify": {
     "transform": [
       "browserify-shim"
@@ -50,7 +53,6 @@
     "colors": "^1.4.0",
     "crypto-browserify": "^3.12.0",
     "crypto-js": "^4.0.0",
-    "deepmerge": "^4.0.0",
     "https-browserify": "^1.0.0",
     "image-size": "^0.9.4",
     "jobqu": "^2.0.5",
@@ -67,7 +69,7 @@
     "supports-color": "^7.2.0",
     "three": "^0.158.0",
     "threejs-examples": "^60.0.0",
-    "ts-deepmerge": "^1.0.6",
+    "ts-deepmerge": "2.0.2",
     "tty-browserify": "^0.0.1",
     "typescript-memoize": "^1.1.1",
     "url": "^0.11.0",
