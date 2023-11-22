@@ -19,11 +19,17 @@ export class Requests {
         timeout: 5000
     })
 
+    private static genericQueue: JobQueue<AxiosRequestConfig, AxiosResponse>
+        = new JobQueue<AxiosRequestConfig, AxiosResponse>(request => Requests.axiosInstance.request(request), Time.millis(10));
     private static mcAssetRequestQueue: JobQueue<AxiosRequestConfig, AxiosResponse>
         = new JobQueue<AxiosRequestConfig, AxiosResponse>(request => Requests.mcAssetInstance.request(request), Time.millis(10));
 
     public static genericRequest(request: AxiosRequestConfig): Promise<AxiosResponse> {
-        return this.axiosInstance.request(request);
+        // return this.axiosInstance.request(request);
+        return this.genericQueue.add(request).catch(e=>{
+            console.debug(p, "generic catch " + e);
+            throw e;
+        });
     }
 
     public static mcAssetRequest(request: AxiosRequestConfig): Promise<AxiosResponse> {

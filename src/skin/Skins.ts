@@ -21,7 +21,7 @@ export class Skins {
         //     }
         //     return undefined;
         // })
-        return this.getCrafatarSkinUrl(uuid);
+        return this.getSkinProxySkinUrl(uuid);
     }
 
     static async fromUsername(username: string): Promise<Maybe<string>> {
@@ -61,7 +61,7 @@ export class Skins {
         //     }
         //     return undefined;
         // })
-        return this.getCrafatarCapeUrl(uuid);
+        return this.getSkinProxyCapeUrl(uuid);
     }
 
     static async capeFromUsername(username: string): Promise<Maybe<string>> {
@@ -89,6 +89,25 @@ export class Skins {
     //<editor-fold desc="Helpers">
 
     private static async usernameToUuid(username: string): Promise<Maybe<string>> {
+        return this.usernameToUuidSkinProxy(username);
+    }
+
+    private static async usernameToUuidSkinProxy(username: string): Promise<Maybe<string>> {
+        return Requests.genericRequest({
+            baseURL: 'https://minecraft-skin-proxy.inventive.workers.dev',
+            url: '/uuid/' + username
+        }).then(res => {
+            if (res.status === 200) {
+                return res.data["id"];
+            }
+            return undefined;
+        }).catch(err => {
+            console.warn(err);
+            return undefined;
+        })
+    }
+
+    private static async usernameToUuidMineTools(username: string): Promise<Maybe<string>> {
         return Requests.genericRequest({
             baseURL: 'https://api.minetools.eu',
             url: '/uuid/' + username
@@ -103,7 +122,7 @@ export class Skins {
         })
     }
 
-    private static async getProfile(uuid: string): Promise<Maybe<any>> {
+    private static async getProfileFromMinetools(uuid: string): Promise<Maybe<any>> {
         return Requests.genericRequest({
             baseURL: 'https://api.minetools.eu',
             url: '/profile/' + uuid
@@ -150,6 +169,22 @@ export class Skins {
 
     private static getCrafatarCapeUrl(uuid: string): string {
         return "https://crafatar.com/capes/" + uuid;
+    }
+
+    private static getMcHeadsSkinUrl(uuid: string): string {
+        return "https://mc-heads.net/skin/" + uuid;
+    }
+
+    private static getMineSkinPlayerSkinUrl(uuid: string): string {
+        return "https://mineskin.org/skin/player/" + uuid;
+    }
+
+    private static getSkinProxySkinUrl(uuid: string): string {
+        return "https://minecraft-skin-proxy.inventive.workers.dev/skin/" + uuid;
+    }
+
+    private static getSkinProxyCapeUrl(uuid: string): string {
+        return "https://minecraft-skin-proxy.inventive.workers.dev/cape/" + uuid;
     }
 
     //</editor-fold>
