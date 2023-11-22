@@ -125,6 +125,9 @@ export class Renderer {
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = PCFSoftShadowMap;
 
+        // supposedly the default is already LinearEncoding, but not doing this renders the scene way too bright
+        this.renderer.outputEncoding = LinearEncoding;
+
         // renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(this.viewWidth, this.viewHeight);
 
@@ -134,9 +137,6 @@ export class Renderer {
     protected createComposer(): EffectComposer {
         const composer = new EffectComposer(this.renderer);
         if (!this.options.composer.enabled) return composer;
-
-        // supposedly the default is already LinearEncoding, but not doing this renders the scene way too bright
-        this.renderer.outputEncoding = LinearEncoding;
 
         composer.setSize(this.viewWidth, this.viewHeight);
         //TODO: options
