@@ -1,9 +1,6 @@
 import { SceneObject } from "../../renderer/SceneObject";
 import { Model, TextureAsset } from "../Model";
 import { Materials } from "../../Materials";
-import { ModelTextures } from "../../assets/ModelTextures";
-import webpack from "webpack";
-import { Assets } from "../../assets/Assets";
 import { Maybe, toRadians } from "../../util/util";
 import { UVMapper } from "../../UVMapper";
 import { TextureAtlas } from "../../texture/TextureAtlas";

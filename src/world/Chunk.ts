@@ -3,14 +3,12 @@ import { BlockObject, isBlockObject } from "../model/block/scene/BlockObject";
 import { Box3, Object3D, Vector3 } from "three";
 import { Maybe } from "../util/util";
 import { BlockInfo } from "./BlockInfo";
-import { del } from "node-persist";
 import { MineRenderScene } from "../renderer/MineRenderScene";
 import { BlockStates } from "../assets/BlockStates";
 import { AssetKey } from "../assets/AssetKey";
 import { MineRenderWorld } from "./MineRenderWorld";
 import { isTripleArray, TripleArray } from "../model/Model";
 import { addBox3WireframeToObject } from "../util/model";
-import webpack from "webpack";
 import { prefix } from "../util/log";
 
 const p = prefix("Chunk");

@@ -20,20 +20,6 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "browserify": {
-    "transform": [
-      "browserify-shim"
-    ]
-  },
-  "browserify-shim": {
-    "three": "global:THREE",
-    "canvas": "global:canvas"
-  },
-  "browser": {
-    "fs": "browserify-fs",
-    "path": "path-browserify",
-    "stream": "stream-browserify"
-  },
   "author": "Haylee Schäfer",
   "license": "MIT",
   "repository": {
@@ -51,9 +37,7 @@
     "buffer": "^6.0.3",
     "canvas": "^2.6.1",
     "colors": "^1.4.0",
-    "crypto-browserify": "^3.12.0",
     "crypto-js": "^4.0.0",
-    "https-browserify": "^1.0.0",
     "image-size": "^0.9.4",
     "jobqu": "^2.0.5",
     "localforage": "^1.9.0",
@@ -64,13 +48,11 @@
     "prismarine-nbt": "^1.5.0",
     "process": "^0.11.10",
     "stats.js": "^0.17.0",
-    "stream-browserify": "^3.0.0",
     "stream-http": "^3.1.1",
     "supports-color": "^7.2.0",
     "three": "^0.158.0",
     "threejs-examples": "^60.0.0",
     "ts-deepmerge": "2.0.2",
-    "tty-browserify": "^0.0.1",
     "typescript-memoize": "^1.1.1",
     "url": "^0.11.0",
     "util": "^0.12.3"
@@ -85,11 +67,6 @@
     "@types/node-persist": "^3.1.1",
     "@types/three": "^0.125.2",
     "ava": "^5.3.1",
-    "browserify-fs": "^1.0.0",
-    "browserify-incremental": "^3.1.1",
-    "browserify-shim": "^3.8.14",
-    "browserify-zlib": "^0.2.0",
-    "clean-webpack-plugin": "^3.0.0",
     "esbuild": "^0.19.5",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "esbuild-runner": "^2.2.2",
