@@ -1,8 +1,8 @@
-import {AxesHelper, Camera, EventDispatcher, GridHelper, OrthographicCamera, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, warn, WebGLRenderer} from "three";
+import { AxesHelper, Camera, EventDispatcher, GridHelper, LinearEncoding, OrthographicCamera, PCFSoftShadowMap, PerspectiveCamera, Scene, sRGBEncoding, TextureEncoding, Vector3, warn, WebGLRenderer } from "three";
 import {MineRenderScene} from "./MineRenderScene";
 import merge from "ts-deepmerge";
 import Stats from "stats.js";
-import { BloomEffect, EffectComposer, EffectPass, RenderPass, SSAOEffect, } from "postprocessing";
+import { BloomEffect, EffectComposer,  RenderPass, SSAOEffect, } from "postprocessing";
 import {DeepPartial, isVector3, Maybe} from "../util/util";
 import {isTripleArray, TripleArray} from "../model/Model";
 import {isOrthographicCamera, isPerspectiveCamera} from "../util/three";
@@ -135,6 +135,9 @@ export class Renderer {
         const composer = new EffectComposer(this.renderer);
         if (!this.options.composer.enabled) return composer;
 
+        // supposedly the default is already LinearEncoding, but not doing this renders the scene way too bright
+        this.renderer.outputEncoding = LinearEncoding;
+
         composer.setSize(this.viewWidth, this.viewHeight);
         //TODO: options
 
@@ -168,7 +171,6 @@ export class Renderer {
         // const shaderPass1 = new ShaderPass(CopyShader);
         // shaderPass1.renderToScreen = true;
         // composer.addPass(shaderPass1);
-
 
         return composer;
     }

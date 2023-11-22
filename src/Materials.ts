@@ -8,7 +8,7 @@ export class Materials {
 
     public static readonly MISSING_TEXTURE = Materials.getImage({ texture: { src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAABlBMVEX/AP8AAACfphTyAAAAFUlEQVQoz2MIhQKGVVAwKjIqQrwIAHRz/wFI17TEAAAAAElFTkSuQmCC" } });
 
-    public static createImage(key: MaterialKey): MeshBasicMaterial {
+    public static createImage(key: MaterialKey): Material {
         //TODO: type from key
         const transparent = key.transparent || false;
         return new MeshBasicMaterial({
