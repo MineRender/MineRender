@@ -126,7 +126,7 @@ export class Renderer {
         renderer.shadowMap.type = PCFSoftShadowMap;
 
         // supposedly the default is already LinearEncoding, but not doing this renders the scene way too bright
-        this.renderer.outputEncoding = LinearEncoding;
+        renderer.outputEncoding = LinearEncoding;
 
         // renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(this.viewWidth, this.viewHeight);
