@@ -388,8 +388,8 @@ export interface CameraOptions {
         top: undefined | number;
         bottom: undefined | number;
     }
-    position: Vector3;
-    lookingAt: Vector3;
+    position: Vector3 | TripleArray;
+    lookingAt: Vector3 | TripleArray;
 }
 
 export interface RenderOptions {
