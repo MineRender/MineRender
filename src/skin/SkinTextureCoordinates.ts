@@ -6,8 +6,7 @@ export type SkinTextureCoordinates = Record<SkinPart, ModelFaces>;
 
 // up and down UVs are weird
 //  so they're flipped on X - u0 is u1, u1 is u0
-
-//TOOD: still need to swap up
+//  up seems to also be flipped on Y - v0 is v1, v1 is v0
 
 const baseSkinCoordinates: SkinTextureCoordinates = {
     head: {
@@ -45,10 +44,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: { // top
             uv: [
-                8,
-                0,
                 16,
-                8
+                8,
+                8,
+                0
             ]
         },
         down: { // bottom
@@ -95,10 +94,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                20,
-                16,
                 28,
-                20
+                20,
+                20,
+                16
             ]
         },
         down: {
@@ -145,10 +144,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                36,
-                48,
                 40,
-                52
+                52,
+                36,
+                48
             ]
         },
         down: {
@@ -199,10 +198,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                44,
-                16,
                 48,
-                20
+                20,
+                44,
+                16
             ],
 
         },
@@ -252,10 +251,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                20,
-                48,
                 24,
-                52
+                52,
+                20,
+                48
             ]
         },
         down: {
@@ -306,10 +305,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                4,
-                16,
                 8,
-                20
+                20,
+                4,
+                16
             ],
 
         },
@@ -359,10 +358,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                40,
-                0,
                 48,
-                8
+                8,
+                40,
+                0
             ]
         },
         down: {
@@ -410,10 +409,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                20,
-                32,
                 28,
-                36
+                36,
+                20,
+                32
             ]
         },
         down: {
@@ -461,10 +460,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                52,
-                48,
                 56,
-                52
+                52,
+                52,
+                48
             ]
         },
         down: {
@@ -512,10 +511,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                44,
-                32,
                 48,
-                36
+                36,
+                44,
+                32
             ]
         },
         down: {
@@ -563,10 +562,10 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         up: {
             uv: [
-                4,
-                48,
                 8,
-                52
+                52,
+                4,
+                48
             ]
         },
         down: {
@@ -614,16 +613,16 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         up: {
             uv: [
                 4,
-                32,
+                36,
                 8,
-                36
+                32
             ]
         },
         down: {
             uv: [
-                12,
-                32,
                 8,
+                32,
+                12,
                 36
             ],
             rotation: 180
