@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { JobQueue } from "jobqu";
 import { Time } from "@inventivetalent/time";
 import { prefix } from "../util/log";
+import { sleep } from "../util";
 
 const p = prefix("Requests");
 
@@ -20,18 +21,19 @@ export class Requests {
     })
 
     private static genericQueue: JobQueue<AxiosRequestConfig, AxiosResponse>
-        = new JobQueue<AxiosRequestConfig, AxiosResponse>(request => Requests.axiosInstance.request(request), Time.millis(10));
+        = new JobQueue<AxiosRequestConfig, AxiosResponse>(request => Requests.axiosInstance.request(request), Time.millis(10), 1);
     private static mcAssetRequestQueue: JobQueue<AxiosRequestConfig, AxiosResponse>
-        = new JobQueue<AxiosRequestConfig, AxiosResponse>(request => Requests.mcAssetInstance.request(request), Time.millis(10));
+        = new JobQueue<AxiosRequestConfig, AxiosResponse>(request => Requests.mcAssetInstance.request(request), Time.millis(10), 1);
 
     public static genericRequest(request: AxiosRequestConfig): Promise<AxiosResponse> {
         // return this.axiosInstance.request(request);
-        return this.genericQueue.add(request).catch(e => {
-            console.debug(p, "generic catch", e);
+        return this.genericQueue.add(request).catch(async e => {
+            console.debug(p, "generic catch", e.code, e);
 
             // axios really likes to randomly cancel requests
             //  no idea why, but just keep retrying
             if (this.shouldRetry(e, request)) {
+                await sleep(100);
                 return this.genericRequest(request);
             }
 
@@ -41,7 +43,7 @@ export class Requests {
 
     public static mcAssetRequest(request: AxiosRequestConfig): Promise<AxiosResponse> {
         return this.mcAssetRequestQueue.add(request).catch(e => {
-            console.debug(p, "mcAssetRequest catch", e);
+            console.debug(p, "mcAssetRequest catch", e.code, e);
             throw e;
         });
         // return Requests.mcAssetInstance.request(request)
