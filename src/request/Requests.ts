@@ -26,18 +26,42 @@ export class Requests {
 
     public static genericRequest(request: AxiosRequestConfig): Promise<AxiosResponse> {
         // return this.axiosInstance.request(request);
-        return this.genericQueue.add(request).catch(e=>{
-            console.debug(p, "generic catch " + e);
+        return this.genericQueue.add(request).catch(e => {
+            console.debug(p, "generic catch", e);
+
+            // axios really likes to randomly cancel requests
+            //  no idea why, but just keep retrying
+            if (this.shouldRetry(e, request)) {
+                return this.genericRequest(request);
+            }
+
             throw e;
         });
     }
 
     public static mcAssetRequest(request: AxiosRequestConfig): Promise<AxiosResponse> {
-        return this.mcAssetRequestQueue.add(request).catch(e=>{
-            console.debug(p, "mcAssetRequest catch " + e);
+        return this.mcAssetRequestQueue.add(request).catch(e => {
+            console.debug(p, "mcAssetRequest catch", e);
             throw e;
         });
         // return Requests.mcAssetInstance.request(request)
+    }
+
+    private static shouldRetry(e: any, request: AxiosRequestConfig): boolean {
+        if ('code' in e) {
+            if ('ECONNABORTED' === e.code) {
+                if ('minerenderRetry' in request) {
+                    if (request['minerenderRetry'] as number > 0) {
+                        (request['minerenderRetry'] as number)--;
+                        return true;
+                    }
+                } else {
+                    request['minerenderRetry'] = 3;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static setMcAssetRoot(root: string) {
@@ -46,6 +70,7 @@ export class Requests {
 
     public static get queueSizes() {
         return {
+            generic: this.genericQueue.size,
             mcAsset: this.mcAssetRequestQueue.size
         }
     }
