@@ -4,6 +4,11 @@ import { ModelFaces } from "../model/ModelElement";
 
 export type SkinTextureCoordinates = Record<SkinPart, ModelFaces>;
 
+// up and down UVs are weird
+//  so they're flipped on X - u0 is u1, u1 is u0
+
+//TOOD: still need to swap up
+
 const baseSkinCoordinates: SkinTextureCoordinates = {
     head: {
         east: { // left
@@ -48,9 +53,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: { // bottom
             uv: [
-                16,
-                0,
                 24,
+                0,
+                16,
                 8
             ]
         }
@@ -98,9 +103,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                28,
-                16,
                 36,
+                16,
+                28,
                 20
             ]
         }
@@ -148,9 +153,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                40,
-                48,
                 44,
+                48,
+                40,
                 52
             ]
         }
@@ -163,7 +168,7 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 44,
                 32
             ],
-            
+
         },
         west: {
             uv: [
@@ -172,7 +177,7 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 52,
                 32
             ],
-            
+
         },
         north: {
             uv: [
@@ -181,7 +186,7 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 48,
                 32
             ],
-            
+
         },
         south: {
             uv: [
@@ -190,7 +195,7 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 56,
                 32
             ],
-            
+
         },
         up: {
             uv: [
@@ -199,17 +204,17 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 48,
                 20
             ],
-            
+
         },
         down: {
             uv: [
-                48,
-                16,
                 52,
+                16,
+                48,
                 20
             ],
-            
-            
+
+
         }
     },
     leftLeg: {
@@ -255,9 +260,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                24,
-                48,
                 28,
+                48,
+                24,
                 52
             ],
             rotation: 180
@@ -271,7 +276,7 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 4,
                 32
             ],
-            
+
         },
         west: {
             uv: [
@@ -288,7 +293,7 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 8,
                 32
             ],
-            
+
         },
         south: {
             uv: [
@@ -297,7 +302,7 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 16,
                 32
             ],
-            
+
         },
         up: {
             uv: [
@@ -306,17 +311,17 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
                 8,
                 20
             ],
-            
+
         },
         down: {
             uv: [
-                8,
-                16,
                 12,
+                16,
+                8,
                 20
             ],
-            
-            
+
+
         }
     },
     hat: {
@@ -362,9 +367,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                48,
-                0,
                 56,
+                0,
+                48,
                 8
             ],
             rotation: 180
@@ -413,9 +418,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                28,
-                32,
                 36,
+                32,
+                28,
                 36
             ],
             rotation: 180
@@ -464,9 +469,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                56,
-                48,
                 60,
+                48,
+                56,
                 52
             ],
             rotation: 180
@@ -515,9 +520,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                48,
-                32,
                 52,
+                32,
+                48,
                 36
             ],
             rotation: 180
@@ -566,9 +571,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                8,
-                48,
                 12,
+                48,
+                8,
                 52
             ]
         }
@@ -616,9 +621,9 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         },
         down: {
             uv: [
-                8,
-                32,
                 12,
+                32,
+                8,
                 36
             ],
             rotation: 180
@@ -676,7 +681,6 @@ const baseSkinCoordinates: SkinTextureCoordinates = {
         }
     }
 }
-
 
 
 export const classicSkinTextureCoordinates: Readonly<SkinTextureCoordinates> = {
