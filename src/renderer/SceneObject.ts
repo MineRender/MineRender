@@ -68,6 +68,15 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
 
     protected createAndAddGroup(name?: string, x: number = 0, y: number = 0, z: number = 0, offsetAxis?: Axis, offset: number = 0): Object3D {
         const group = this.createGroup(name, x, y, z, offsetAxis, offset);
+
+        if (name) {
+            let existing = this.getObjectByName(group.name);
+            if (existing) {
+                this.remove(existing);
+            }
+        }
+
+        console.log("add", group, group.name);
         this.add(group);
         this.notifyDirty();
         return group;
@@ -76,7 +85,7 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
     protected createGroup(name?: string, x: number = 0, y: number = 0, z: number = 0, offsetAxis?: Axis, offset: number = 0): Object3D {
         const obj = new Object3D();
         if (name) {
-            obj.name = `group:${ name }`;
+            obj.name = `group:${name}`;
         }
         if (x > 0 || y > 0 || z > 0) {
             obj.position.set(x, y, z);
@@ -91,7 +100,7 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
      * Get a group by its name
      */
     public getGroupByName(name: string): Maybe<Object3D> {
-        return this.getObjectByName(`group:${ name }`) as Object3D;
+        return this.getObjectByName(`group:${name}`) as Object3D;
     }
 
     /**
@@ -107,12 +116,24 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
 
     //<editor-fold desc="MESHES">
 
+    protected addOrReplaceMesh(mesh: Mesh, parent: Object3D, name?: string) {
+        if (name) {
+            const existing = parent.getObjectByName(mesh.name);
+            if (existing) {
+                console.log("remove", existing.name, existing);
+                parent.remove(existing);
+            }
+        }
+        console.log("add", mesh, mesh.name);
+        parent.add(mesh);
+    }
+
     protected createAndAddMesh(name?: string, group?: Object3D, geometry?: BufferGeometry, material?: Material | Material[], offsetAxis?: Axis, offset: number = 0): Mesh {
         const mesh = this.createMesh(name, geometry, material, offsetAxis, offset);
         if (group) {
-            group.add(mesh);
+            this.addOrReplaceMesh(mesh, group, name);
         } else {
-            this.add(mesh);
+            this.addOrReplaceMesh(mesh, this, name);
         }
         this.notifyDirty();
         return mesh;
@@ -121,7 +142,7 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
     protected createMesh(name?: string, geometry?: BufferGeometry, material?: Material | Material[], offsetAxis?: Axis, offset: number = 0): Mesh {
         const mesh = new Mesh(geometry, material);
         if (name) {
-            mesh.name = `mesh:${ name }`;
+            mesh.name = `mesh:${name}`;
         }
 
         //TODO
@@ -137,7 +158,7 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
     protected createInstancedMesh(name: Maybe<string>, geometry: BufferGeometry, material: Material | Material[], count: number): InstancedMesh {
         const mesh = new InstancedMesh(geometry, material, count);
         if (name) {
-            mesh.name = `mesh:${ name }`;
+            mesh.name = `mesh:${name}`;
         }
         return mesh;
     }
@@ -146,7 +167,7 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
      * Get a mesh by its name
      */
     public getMeshByName(name: string): Maybe<Mesh> {
-        return this.getObjectByName(`mesh:${ name }`) as Mesh;
+        return this.getObjectByName(`mesh:${name}`) as Mesh;
     }
 
     /**
@@ -229,9 +250,9 @@ export class SceneObject extends Object3D implements Disposable, Instanceable, T
         if (!this.isInstanced) throw new MineRenderError("Object is not instanced");
         const i = this._instanceCounter++;
         this.setMatrixAt(i, new Matrix4());
-        console.debug(p,"nextInstance " + i);
+        console.debug(p, "nextInstance " + i);
         if (i === this.options.maxInstanceCount) {
-            console.warn(p,"Max instance count reached for " + this);
+            console.warn(p, "Max instance count reached for " + this);
         }
         if (this.scene) {
             this.scene.stats.instanceCount++;

@@ -16,6 +16,9 @@ const box4_12_4outer: TripleArray = [4.504, 12.504, 4.504];
 const box3_12_4inner: TripleArray = [3, 12, 4];
 const box3_12_4outer: TripleArray = [3.504, 12.504, 4.504];
 
+const box4_12_3inner: TripleArray = [4, 12, 3];
+const box4_12_3outer: TripleArray = [4.504, 12.504, 3.504];
+
 const box10_16_1: TripleArray = [10, 16, 1];
 
 const baseSkinGeometries: SkinGeometries = {
@@ -40,11 +43,13 @@ const baseSkinGeometries: SkinGeometries = {
     cape: box10_16_1
 }
 
-export const classicSkinGeometries: SkinGeometries = merge(baseSkinGeometries);
-export const slimSkinGeometries: SkinGeometries = merge(baseSkinGeometries, {
-    leftArm: box3_12_4inner,
-    leftSleeve: box3_12_4outer,
+export const classicSkinGeometries: SkinGeometries = {...{}, ...baseSkinGeometries};
+export const slimSkinGeometries: SkinGeometries = {
+    ...{}, ...baseSkinGeometries, ...{
+        leftArm: box3_12_4inner,
+        leftSleeve: box3_12_4outer,
 
-    rightArm: box3_12_4inner,
-    rightSleeve: box3_12_4outer,
-});
+        rightArm: box3_12_4inner,
+        rightSleeve: box3_12_4outer,
+    }
+};

@@ -11,7 +11,7 @@
     "compile:w": "tsc -p tsconfig.json -w",
     "compile-c:w": "tsc -p tsconfig-cjs.json -w",
     "bundle": "node ./build.mjs",
-    "bundle:w": "TODO",
+    "bundle:w": "node ./build.mjs --watch",
     "build": "yarn run clean && npm run compile && npm run bundle",
     "test": "ava",
     "doc": "typedoc --out docs src",

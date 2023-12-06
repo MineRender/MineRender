@@ -1,7 +1,9 @@
 import * as esbuild from 'esbuild';
 import { polyfillNode } from "esbuild-plugin-polyfill-node";
 
-await esbuild.build({
+const args = process.argv.slice(2);
+
+const context = await esbuild.context({
     platform: "browser",
     entryPoints: ['src/index.ts'],
     bundle: true,
@@ -19,4 +21,15 @@ await esbuild.build({
     globalName:"MineRender",
     plugins: [polyfillNode()]
 });
-setTimeout(() => process.exit(0), 100);
+
+
+if (args.includes("--watch")) {
+    await context.watch();
+// } else if (args.includes("--serve")) {
+//     await context.serve({
+//         servedir: ".",
+//     })
+} else {
+    await context.rebuild();
+    await context.dispose();
+}
