@@ -7,7 +7,6 @@ import { Assets } from "./assets/Assets";
 import { Maybe, toRadians } from "./util/util";
 import { WrappedImage } from "./WrappedImage";
 import { CanvasImage } from "./canvas/CanvasImage";
-import { Mode } from "fs";
 import { TextureAtlas } from "./texture/TextureAtlas";
 import { Caching } from "./cache/Caching";
 import { ImageLoader } from "./image/ImageLoader";

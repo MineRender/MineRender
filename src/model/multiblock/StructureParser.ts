@@ -1,6 +1,6 @@
 import { MultiBlockBlock, MultiBlockStructure } from "./MultiBlockStructure";
 import { TripleArray } from "../Model";
-import { NBT } from "prismarine-nbt";
+import type { NBT } from "prismarine-nbt";
 import { MineRenderError } from "../../error/MineRenderError";
 import { BlockStateProperties } from "../block/BlockStateProperties";
 

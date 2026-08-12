@@ -1,4 +1,4 @@
-import {ImageData} from "canvas";
+import type { ImageData } from "canvas";
 import { CanvasImage } from "../canvas/CanvasImage";
 import { DoubleArray, Model } from "../model/Model";
 import { AnimatorFunction } from "../AnimatorFunction";

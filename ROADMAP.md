@@ -1,6 +1,8 @@
 # MineRender V2 — Status, Parity & Continuation Plan
 
-> Snapshot from a full repo + ecosystem audit, 2026-08. Baseline: branch `typescript` @ `bd141e4` ("yarn4", 2025-05-22), v2.0.0-alpha.15, plus uncommitted tsup-migration working-tree changes. Companion repos audited: `../MineRender` (V1), `../MineRenderServer`, `../MineRenderVite`, `../MineRenderWeb`, `../MineRenderSimple`.
+> Snapshot from a full repo + ecosystem audit, 2026-08. Baseline: branch `typescript` @ `bd141e4` ("yarn4", 2025-05-22), v2.0.0-alpha.15, plus uncommitted tsup-migration working-tree changes.
+>
+> **Update 2026-08-12:** steps 1-4 below are done — see the "Completed" section. The parity-matrix rows for build, packaging, clean import and dual-target are historical; everything from step 5 on still stands. Companion repos audited: `../MineRender` (V1), `../MineRenderServer`, `../MineRenderVite`, `../MineRenderWeb`, `../MineRenderSimple`.
 
 **Headline:** the source is fully type-clean (`tsc --noEmit`: 0 errors across 129 files). The stall was never TypeScript debt — it is (a) a platform-mismatched `node_modules` (installed by npm from Windows, built from WSL2: wrong-platform esbuild/rollup/canvas natives), (b) three coexisting build systems with the newest (tsup) entirely uncommitted, and (c) the structural lack of a browser/Node packaging seam, which every build system so far (browserify-shim → esbuild polyfills → dual-tsc → tsup) merely relocated.
 
@@ -37,28 +39,19 @@
 
 ## Continuation plan (ordered)
 
-### 1. Unbreak the dev environment — critical
-From WSL: delete `node_modules` and the staged `package-lock.json`, run a mutable `yarn install` (regenerates `yarn.lock` for the three→peerDependencies move, fetches linux-x64 natives, rebuilds `canvas`). If the checkout must stay shared with Windows, instead add `supportedArchitectures` (win32-x64 + linux-x64) to `.yarnrc.yml`. Delete `yarn-error.log` (it's just an old `yarn add 2.0.0-alpha.12` typo failure). Consider moving the checkout off `/mnt/p` DrvFS. Verify `yarn build` passes; `tsc --noEmit` is already clean.
+### 1-4. Build, packaging, side effects, browser/Node seam — **DONE** (2026-08-12)
 
-### 2. Commit the tsup migration coherently; fix packaging metadata — critical
-The entire tsup migration is uncommitted (and `tsup.config.ts` is **staged as an empty blob** with the real content unstaged; branch `typescript-tsup` has no extra commits). Stage the real config + package.json changes + regenerated lock; commit. Then:
-- `types` → `./dist/index.d.ts` (or per-condition `types` in the exports map).
-- Add a `files` whitelist (dist only) — alpha tarballs shipped the entire V1 website.
-- Drop `splitting: true` (engages tsup's experimental sucrase CJS path; buys nothing for a single entry).
-- Add an `iife` entry (`globalName: MineRender`) to replace `build.mjs` so `dist/bundle.js` consumers keep working.
-- Repoint ava: `ava.config.js` rewrites `src/` → `dist/cjs/`, which tsup deletes — run tests via esbuild-runner/tsx against `src/` instead.
-- Fix `scripts/make-exports.sh` (emits every barrel line twice) and regenerate `src/index.ts`.
-- Prune dead browserify-era deps: onscreen, stream-http, pako, url, util, assert, process, colors, supports-color, threejs-examples. Replace the Java-era `renovate.json`.
+**Dev environment.** `node_modules` reinstalled from WSL (linux-x64 natives), `yarn.lock` regenerated for the three→peerDependencies move, npm `package-lock.json` and `yarn-error.log` removed, `.gitignore` updated for yarn 4, `.gitattributes` added (`eol=lf`) so the Windows/WSL split stops rewriting every file. `canvas` moved to `optionalDependencies` — it has no prebuilt binary for current Node and a source build needs cairo/pango/pixman, so a browser-only install must not be blocked by it. TypeScript 4.1 → 5.6 (tsup's `dts` needs ≥4.5), typedoc 0.25 → 0.26 to match.
 
-### 3. Purge import-time side effects and dead code — critical
-- Delete the 300k-iteration benchmark IIFE (`src/util/util.ts:79-120` — it ships in the bundles).
-- Make `src/Ticker.ts` lazy-start, `unref()` in Node, fix `dispose()`/`remove(0)`.
-- Remove stray imports: `import exp from "constants"` (`util/util.ts:4`), `SSAOPass` from three/examples (`MineRenderScene.ts:8`, `ImageLoader.ts:7`), `keys` from node-persist (`ModelTextures.ts:10`), `warn` from three (`Renderer.ts:1`).
-- Delete `src/lib/OrbitControls.js`, `src/_model/`, empty root `three/`, `mccolor.js`.
-- Sweep `console.log` from hot paths (AssetLoader, UVMapper atlas-data-URL log, BlockObject, ArchiveAssetSource, Entities).
+**Build.** `build.mjs`, `tsconfig-cjs.json` and the `compile*` scripts are gone; tsup is the only build tool, with three passes (browser / node / iife) described in AGENTS.md. `dist/bundle.js` keeps its path. Packaging fixed: conditional `exports` (browser/node × import/require × types), `files` whitelist (tarball: 17 files, was the entire V1 website), `prepublishOnly`, correct `types`. `splitting` off. ava now runs the TS sources through esbuild-runner. `scripts/make-exports.sh` rewritten bottom-up — no more duplicated barrel lines — and it now excludes `src/env/` and the entries. Dead deps pruned: assert, browser-or-node, colors, onscreen, pako, process, stream-http, supports-color, threejs-examples, url, util, @ava/typescript, glob, event-stream, progress-stream, @mapbox/node-pre-gyp, @types/md5.
 
-### 4. Build the browser/Node environment seam — critical (the historical blocker)
-Implement what `src/Env.ts` was meant to be: an injected/detected environment providing canvas+image creation, persistence backend, crypto. Convert `import * as nodeCanvas from "canvas"` (`CanvasCompat.ts:1`) and node-persist/localforage (`PersistentCache.ts:2-4`) to lazy dynamic imports behind it (the pattern already proven by `NBTHelper.ts`). Mark `canvas` an optional peerDependency. Add split entries (`index.browser.ts` / `index.node.ts`) and a conditional exports map (`browser`/`node` × `import`/`require` + `types`). Success criterion: MineRenderVite/MineRenderWeb build **without** node-polyfill plugins, and a Node import pulls zero browser deps.
+**Import-time side effects.** Benchmark IIFE deleted; `Ticker` starts lazily, unrefs, and `remove(0)`/`dispose()` fixed; `Materials.MISSING_TEXTURE` and the three `PERSISTENT_CACHE` fields are lazy getters (they used to decode an image / open IndexedDB at import); stray `constants`, `fs` and `node-persist` imports removed. Remaining: `loading-cache` and `jobqu` never `unref()` their self-rescheduling timers, so `shutdown()` (`src/shutdown.ts`) exists to end them — fixing that upstream would let it be optional.
+
+**The seam.** `src/Env.ts` now defines `EnvProvider` (`createCanvas`, `createImage`, `imageSize`, `openCache`) with `src/env/browser/` and `src/env/node/` implementations, selected by the entry (`src/index.browser.ts` / `src/index.node.ts`). `image-size` can't run in a browser (top-level `fs`), so the browser provider ships a small PNG/GIF/JPEG header probe instead. `NodeCache` now calls node-persist's required `init()` (lazily) — the Node cache path had never actually worked. `ts-deepmerge` is inlined to dodge a CJS/ESM interop break, and the `crypto-js/core` deep import was dropped as unresolvable under Node ESM.
+
+Verified: `tsc --noEmit` clean; all three targets build; browser output contains **zero** Node-module references (only a dynamic `import("prismarine-nbt")` remains, and only structure loading triggers it); CJS+ESM browser builds and the Node build (canvas stubbed — no native binary available on this machine) all load, register the right provider, round-trip the persistent cache, and exit cleanly after `shutdown()`.
+
+**Not done / follow-ups:** confirm MineRenderVite builds without `vite-plugin-node-polyfills`; give MineRenderWeb one delivery format instead of loading `dist/bundle.js` *and* bundling the package; `unref()` upstream in loading-cache and jobqu; `@types/three` is still 33 minors behind; `src/lib/OrbitControls.js`, `src/_model/`, root `three/`, `mccolor.js` still un-deleted; console.log sweep still pending.
 
 ### 5. Renderer core fixes + built-in OrbitControls — high
 Fix `stop(); // just in case` calling `window.stop()` (`Renderer.ts:280`). Implement `dispose()`. Restore or delete `fpsLimit`. Resolve the composer brightness defect (`Renderer.ts:144`) or default `composer.enabled` to false. Integrate vendored OrbitControls behind `options.controls` with automatic `registerEventDispatcher` (MineRenderWeb's TODO asks for exactly this). Bump `@types/three` to ~0.158, migrate `outputEncoding` → `outputColorSpace`, rewrite `three/src/*` deep imports to bare `three`. Fix `MineRenderScene.remove()` (detach listeners, decrement stats).

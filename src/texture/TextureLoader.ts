@@ -3,7 +3,7 @@ import { Caching } from "../cache/Caching";
 import * as THREE from "three";
 import { ImageLoader } from "../image/ImageLoader";
 import { createCanvas } from "../canvas/CanvasCompat";
-import { CanvasRenderingContext2D } from "canvas";
+import type { CanvasRenderingContext2D } from "canvas";
 import { Textures } from "./Textures";
 
 export class TextureLoader {

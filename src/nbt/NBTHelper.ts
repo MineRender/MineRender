@@ -1,4 +1,4 @@
-import { NBT } from "prismarine-nbt";
+import type { NBT } from "prismarine-nbt";
 import { MinecraftAsset } from "../MinecraftAsset";
 
 export class NBTHelper {

@@ -94,25 +94,43 @@ export class Caching {
         .buildAsync<CacheKey, BlockState>();
 
 
-    public static clear() {
-        this.rawImageCache.invalidateAll();
-        this.textureCache.invalidateAll();
-        this.imageDataCache.invalidateAll();
-        this.wrappedImageCache.invalidateAll();
-        this.canvasImageDataCache.invalidateAll();
-        this.materialCache.invalidateAll();
-        this.modelTextureAtlasCache.invalidateAll();
-        this.textureAssetCache.invalidateAll();
-        //TODO: add all
-        this.rawModelCache.invalidateAll();
-        this.mergedModelCache.invalidateAll();
+    /** Every cache above, so clear()/end() can never fall out of sync with the field list again. */
+    private static get all(): { invalidateAll(): void; end(): void }[] {
+        return [
+            this.rawImageCache,
+            this.imageDataCache,
+            this.canvasImageDataCache,
+            this.wrappedImageCache,
+            this.boxGeometryCache,
+            this.textureCache,
+            this.materialCache,
+            this.boxMeshCache,
+            this.textureAssetCache,
+            this.textureMetaCache,
+            this.rawModelCache,
+            this.mergedModelCache,
+            this.modelTextureAtlasCache,
+            this.blockStateCache
+        ];
     }
 
-    public static end() {
-        this.clear();
+    public static clear() {
+        for (const cache of this.all) {
+            cache.invalidateAll();
+        }
+    }
 
-        this.rawImageCache.end();
-        this.textureCache.end();
+    /**
+     * Clears every cache and stops its expiry timer.
+     *
+     * loading-cache reschedules that timer indefinitely, so a Node process will not exit until
+     * this is called - see {@link shutdown}.
+     */
+    public static end() {
+        for (const cache of this.all) {
+            cache.invalidateAll();
+            cache.end();
+        }
     }
 
     public static get cacheSizes() {

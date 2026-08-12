@@ -1,4 +1,4 @@
-import { ImageData } from "canvas";
+import type { ImageData } from "canvas";
 import { ImageInfo } from "./image/ImageLoader";
 import { ExtractableImageData } from "./ExtractableImageData";
 

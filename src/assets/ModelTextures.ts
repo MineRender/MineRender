@@ -7,13 +7,16 @@ import { ImageLoader } from "../image/ImageLoader";
 import { ExtractableImageData } from "../ExtractableImageData";
 import { MinecraftTextureMeta } from "../MinecraftTextureMeta";
 import { PersistentCache } from "../cache/PersistentCache";
-import { keys } from "node-persist";
 import { AssetKey } from "./AssetKey";
 import { AssetParser } from "./source/parser/AssetParsers";
 
 export class ModelTextures {
 
-    private static PERSISTENT_META_CACHE = PersistentCache.open("minerender-texturemeta");
+    private static _persistentMetaCache: PersistentCache | undefined;
+
+    private static get PERSISTENT_META_CACHE(): PersistentCache {
+        return this._persistentMetaCache ??= PersistentCache.open("minerender-texturemeta");
+    }
 
     public static async get(key: AssetKey): Promise<Maybe<ExtractableImageData>> {
         const asset = await this.preload(key);

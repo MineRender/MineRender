@@ -6,7 +6,13 @@ import { AssetKey } from "./assets/AssetKey";
 
 export class Materials {
 
-    public static readonly MISSING_TEXTURE = Materials.getImage({ texture: { src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAABlBMVEX/AP8AAACfphTyAAAAFUlEQVQoz2MIhQKGVVAwKjIqQrwIAHRz/wFI17TEAAAAAElFTkSuQmCC" } });
+    private static readonly MISSING_TEXTURE_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAABlBMVEX/AP8AAACfphTyAAAAFUlEQVQoz2MIhQKGVVAwKjIqQrwIAHRz/wFI17TEAAAAAElFTkSuQmCC";
+
+    // resolved lazily: as a static field this decoded an image the moment the library was
+    // imported, which needs both a DOM and an EnvProvider to already be in place
+    public static get MISSING_TEXTURE(): Material {
+        return Materials.getImage({ texture: { src: Materials.MISSING_TEXTURE_SRC } });
+    }
 
     public static createImage(key: MaterialKey): Material {
         //TODO: type from key

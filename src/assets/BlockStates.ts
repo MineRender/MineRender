@@ -13,7 +13,11 @@ import { MinecraftAsset } from "../MinecraftAsset";
 
 export class BlockStates {
 
-    private static PERSISTENT_CACHE = PersistentCache.open("minerender-blockstates");
+    private static _persistentCache: PersistentCache | undefined;
+
+    private static get PERSISTENT_CACHE(): PersistentCache {
+        return this._persistentCache ??= PersistentCache.open("minerender-blockstates");
+    }
 
     // BlockState names are hardcoded
     @Memoize()

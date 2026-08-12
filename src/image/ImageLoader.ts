@@ -2,7 +2,7 @@ import { CompatImage, createCanvas, createImage } from "../canvas/CanvasCompat";
 import { serializeImageKey } from "../cache/CacheKey";
 import { Caching } from "../cache/Caching";
 import { AxiosResponse } from "axios";
-import imageSize from "image-size";
+import { Env } from "../Env";
 import { Requests } from "../request/Requests";
 import { SSAOPassOUTPUT } from "three/examples/jsm/postprocessing/SSAOPass";
 import { WrappedImage } from "../WrappedImage";
@@ -98,7 +98,7 @@ export class ImageLoader {
     public static async processResponse(response: Partial<AxiosResponse>): Promise<ImageInfo> {
         const src = response.config!.url;
         const data = Buffer.from(response.data!);
-        const { width, height, type } = imageSize(data);
+        const { width, height, type } = Env.provider.imageSize(data);
         return {
             src,
             width: width || 0,

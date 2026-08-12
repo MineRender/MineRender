@@ -77,4 +77,13 @@ export class Requests {
         }
     }
 
+    /**
+     * Stops both queue timers. jobqu reschedules itself indefinitely, so a Node process will not
+     * exit until this is called - see {@link shutdown}.
+     */
+    public static end() {
+        this.genericQueue.end();
+        this.mcAssetRequestQueue.end();
+    }
+
 }

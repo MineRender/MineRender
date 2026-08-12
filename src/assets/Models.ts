@@ -13,7 +13,13 @@ import { AssetParser } from "./source/parser/AssetParsers";
 
 export class Models {
 
-    private static PERSISTENT_CACHE = PersistentCache.open("minerender-models");
+    private static _persistentCache: PersistentCache | undefined;
+
+    // opened lazily: touching the store at import time would hit IndexedDB/disk just for loading
+    // the library, and would require an EnvProvider before any entry has had a chance to register
+    private static get PERSISTENT_CACHE(): PersistentCache {
+        return this._persistentCache ??= PersistentCache.open("minerender-models");
+    }
 
     @Memoize()
     public static async getItemList(): Promise<string[]> {
